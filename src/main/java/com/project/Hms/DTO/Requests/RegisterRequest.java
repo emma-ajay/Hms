@@ -11,7 +11,6 @@ public class RegisterRequest {
 
     private String gender;
 
-    private Boolean isActive;
 
 
     public RegisterRequest(String email, String password, String name, String gender,  String userName,Boolean isActive ) {
@@ -20,7 +19,7 @@ public class RegisterRequest {
         this.password = password;
         this.name = name;
         this.gender = gender;
-        this.isActive = isActive;
+
 
     }
 
@@ -66,12 +65,6 @@ public class RegisterRequest {
         this.userName = userName;
     }
 
-    public Boolean getActive() {
-        return isActive;
-    }
 
-    public void setActive(Boolean active) {
-        isActive = active;
-    }
 
 }
