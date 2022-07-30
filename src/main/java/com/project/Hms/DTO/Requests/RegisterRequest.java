@@ -9,17 +9,19 @@ public class RegisterRequest {
 
     private String name;
 
-    private String phoneNumber;
+    private String gender;
 
-    private String image;
+    private Boolean isActive;
 
-    public RegisterRequest(String email, String password, String name, String phoneNumber, String image, String userName) {
+
+    public RegisterRequest(String email, String password, String name, String gender,  String userName,Boolean isActive ) {
         this.email = email;
         this.userName=userName;
         this.password = password;
         this.name = name;
-        this.phoneNumber = phoneNumber;
-        this.image = image;
+        this.gender = gender;
+        this.isActive = isActive;
+
     }
 
     public String getEmail() {
@@ -46,21 +48,15 @@ public class RegisterRequest {
         this.name = name;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public String getGender() {
+        return gender;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
-    public String getImage() {
-        return image;
-    }
 
-    public void setImage(String image) {
-        this.image = image;
-    }
 
     public String getUserName() {
         return userName;
@@ -69,4 +65,13 @@ public class RegisterRequest {
     public void setUserName(String userName) {
         this.userName = userName;
     }
+
+    public Boolean getActive() {
+        return isActive;
+    }
+
+    public void setActive(Boolean active) {
+        isActive = active;
+    }
+
 }
