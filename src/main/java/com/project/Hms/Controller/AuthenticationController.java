@@ -87,7 +87,7 @@ public class AuthenticationController {
 
 
         User user = modelMapper.map(registerRequest,User.class);
-         String password =passwordEncoder.encode(registerRequest.getPassword());
+        String password =passwordEncoder.encode(registerRequest.getPassword());
         user.setPassword(password);
 
         Role userRole = roleRepository.findByName(RoleName.ROLE_STUDENT)
