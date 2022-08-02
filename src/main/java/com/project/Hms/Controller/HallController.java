@@ -31,7 +31,7 @@ public class HallController {
 
     // view all halls
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_PORTER', 'ROLE_STUDENT')")
-    @GetMapping("")
+    @GetMapping
     public ResponseEntity<GenericResponse> viewHalls() {
         try {
             String message = "Request successful";
@@ -58,7 +58,7 @@ public class HallController {
 
     //view a hall by id
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_PORTER', 'ROLE_STUDENT')")
-    @GetMapping("/view/{hallId}")
+    @GetMapping(path = "/view/{hallId}")
     public ResponseEntity<GenericResponse> viewHallById(@PathVariable("hallId") Long hallId) {
         try {
             String message = "Request successful";
@@ -90,7 +90,7 @@ public class HallController {
 
     //view a hall by name
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_PORTER', 'ROLE_STUDENT')")
-    @GetMapping("/view/{hallName}")
+    @GetMapping(path = "/view/{hallName}")
     public ResponseEntity<GenericResponse> viewHallByName(@PathVariable("hallId") String hallName) {
         try {
             String message = "Request successful";
@@ -122,7 +122,7 @@ public class HallController {
 
     //view a hall by gender
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_PORTER', 'ROLE_STUDENT')")
-    @GetMapping("/view/{hallId}")
+    @GetMapping(path = "/view/{hallGender}")
     public ResponseEntity<GenericResponse> viewHallByGender(@PathVariable("hallGender") String hallGender) {
         try {
             String message = "Request successful";
