@@ -21,8 +21,7 @@ public class Hall {
     private Long hallCapacity;
     private Boolean isReserved;
 
-    @OneToMany(mappedBy = "hall", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Wing> wings;
+
 
     public Hall() {
     }
@@ -38,6 +37,14 @@ public class Hall {
         this.hallName = hallName;
         this.hallGender = hallGender;
         this.isReserved = isReserved;
+    }
+
+    public Long getHallId() {
+        return hallId;
+    }
+
+    public void setHallId(Long hallId) {
+        this.hallId = hallId;
     }
 
     public String getHallName() {
@@ -72,11 +79,5 @@ public class Hall {
         isReserved = reserved;
     }
 
-    public List<Wing> getWings() {
-        return wings;
-    }
 
-    public void setWings(List<Wing> wings) {
-        this.wings = wings;
-    }
 }
