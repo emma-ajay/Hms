@@ -24,16 +24,5 @@ public class Room {
     public Room() {
     }
 
-    public Room(Long roomId, String roomNumber, Boolean isFull, Boolean isReserved) {
-        this.roomId = roomId;
-        this.roomNumber = roomNumber;
-        this.isFull = isFull;
-        this.isReserved = isReserved;
-    }
 
-    public Room(String roomNumber, Boolean isFull, Boolean isReserved) {
-        this.roomNumber = roomNumber;
-        this.isFull = isFull;
-        this.isReserved = isReserved;
-    }
 }
