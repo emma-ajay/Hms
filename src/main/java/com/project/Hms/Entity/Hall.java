@@ -1,6 +1,7 @@
 package com.project.Hms.Entity;
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Hall {
@@ -21,7 +22,8 @@ public class Hall {
     private Long hallCapacity;
     private Boolean isReserved;
 
-
+    @OneToMany(mappedBy = "hall")
+    private Set<Report> reportSet;
 
     public Hall() {
     }

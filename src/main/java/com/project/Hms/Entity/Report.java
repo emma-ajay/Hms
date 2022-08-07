@@ -24,7 +24,17 @@ public class Report {
     private String modifiedDate;
 
 
+    @ManyToOne
+    @JoinColumn(name = "userId", insertable = false ,updatable = false)
+    private User user;
 
+    @ManyToOne
+    @JoinColumn(name = "hallId",insertable = false,updatable = false)
+    private Hall hall;
+
+    @ManyToOne
+    @JoinColumn(name = "roomId",insertable = false,updatable = false)
+    private Room room;
 
 
     public Report() {

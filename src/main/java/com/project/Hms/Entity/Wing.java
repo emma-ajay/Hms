@@ -43,6 +43,11 @@ public class Wing {
         this.wingName = wingName;
     }
 
+    public Long getWingId() {
+        return wingId;
+    }
 
-
+    public void setWingId(Long wingId) {
+        this.wingId = wingId;
+    }
 }

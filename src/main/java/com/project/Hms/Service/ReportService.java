@@ -1,7 +1,9 @@
 package com.project.Hms.Service;
 
 import com.project.Hms.DTO.Response.GenericResponse;
+import com.project.Hms.Entity.Hall;
 import com.project.Hms.Entity.Report;
+import com.project.Hms.Entity.Room;
 import com.project.Hms.Entity.User;
 import com.project.Hms.Exceptions.BadRequestException;
 import com.project.Hms.Repository.ReportRepository;
@@ -11,6 +13,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -24,19 +27,29 @@ public class ReportService {
     ReportRepository reportRepository;
 
     @Autowired
+    HallService hallService;
+
+    @Autowired
     UserService userService;
+
+    @Autowired
+    RoomService roomService;
 
 
     // create report
-    public ResponseEntity<?> createReport(Long userId, Report report){
-        Long roomId = userService.findRoomIdWithUserId(userId);
+    public ResponseEntity<?> createReport(Long userId,Long roomId, Report report){
 
+
+        Room room = roomService.findById(roomId);
+        if(room== null) throw new BadRequestException("room doesn't exist");
+        Long hallId = room.getHallId();
 
         LocalDateTime localDateTime = LocalDateTime.now();
         String dateTime = localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
         report.setUserId(userId);
         report.setRoomId(roomId);
+        report.setHallId(hallId);
         report.setHasBeenResolved(Boolean.FALSE);
         report.setCreatedDate(dateTime);
         report.setModifiedDate(dateTime);
@@ -46,6 +59,19 @@ public class ReportService {
                         "new report created",
                      report,
                 HttpStatus.CREATED));
+    }
+
+
+    // view report by Id
+    public ResponseEntity<?> findReportById(Long reportId){
+        Optional<Report> report = reportRepository.findById(reportId);
+        return ResponseEntity.ok( new GenericResponse("00",
+                HttpStatus.OK,
+                "View report by id",
+                report,
+                HttpStatus.OK));
+
+
     }
 
     // view all reports
@@ -84,7 +110,10 @@ public class ReportService {
     }
 
     // view all Reports by Hall
-    public ResponseEntity<?> viewAllReportsByHall(Long hallId){
+    public ResponseEntity<?> viewAllReportsByHall(String hallName){
+        Hall hall = hallService.findHallByName(hallName);
+        if(hall== null) throw new BadRequestException("Hall doesn't exist");
+        Long hallId = hall.getHallId();
         List<Report> reportList = reportRepository.findReportsByHallId(hallId);
         return ResponseEntity.ok( new GenericResponse("00",
                 HttpStatus.OK,
@@ -117,7 +146,13 @@ public class ReportService {
     }
 
     // update report status
+    @Transactional
     public  ResponseEntity<?> resolveReport(Long reportId, Long userId){
+
+        // check if report exists
+        Report report1 = reportRepository.findReportsByReportId(reportId);
+        if(report1 == null) throw new BadRequestException("report doesn't exist");
+
 
         // Ensure User updating the report is the creator
         //Ensure the report exists

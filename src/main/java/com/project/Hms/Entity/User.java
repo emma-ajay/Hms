@@ -34,6 +34,12 @@ public class User {
     private Long roomId;
 
 
+
+    @ManyToOne
+    @JoinColumn(name = "roomId", insertable = false, updatable = false)
+    private Room room;
+
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -46,6 +52,17 @@ public class User {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<Report> reportSet;
+
+    public Set<Report> getReportSet() {
+        return reportSet;
+    }
+
+    public void setReportSet(Set<Report> reportSet) {
+        this.reportSet = reportSet;
     }
 
     public User() {

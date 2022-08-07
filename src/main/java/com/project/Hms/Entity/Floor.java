@@ -16,15 +16,24 @@ public class Floor {
     )
 
     private Long floorId;
+    private String floorName;
 
 
 
     public Floor() {
     }
 
-    public Floor(Long floorId) {
+    public Floor(Long floorId, String floorName) {
         this.floorId = floorId;
+        this.floorName = floorName;
+    }
 
+    public String getFloorName() {
+        return floorName;
+    }
+
+    public void setFloorName(String floorName) {
+        this.floorName = floorName;
     }
 
     public Long getFloorId() {
