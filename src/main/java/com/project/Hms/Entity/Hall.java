@@ -1,6 +1,7 @@
 package com.project.Hms.Entity;
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Hall {
@@ -21,8 +22,8 @@ public class Hall {
     private Long hallCapacity;
     private Boolean isReserved;
 
-    @OneToMany(mappedBy = "hall", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Wing> wings;
+    @OneToMany(mappedBy = "hall")
+    private Set<Report> reportSet;
 
     public Hall() {
     }
@@ -38,6 +39,14 @@ public class Hall {
         this.hallName = hallName;
         this.hallGender = hallGender;
         this.isReserved = isReserved;
+    }
+
+    public Long getHallId() {
+        return hallId;
+    }
+
+    public void setHallId(Long hallId) {
+        this.hallId = hallId;
     }
 
     public String getHallName() {
@@ -72,11 +81,5 @@ public class Hall {
         isReserved = reserved;
     }
 
-    public List<Wing> getWings() {
-        return wings;
-    }
 
-    public void setWings(List<Wing> wings) {
-        this.wings = wings;
-    }
 }

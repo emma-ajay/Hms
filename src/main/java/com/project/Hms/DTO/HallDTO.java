@@ -1,6 +1,9 @@
 package com.project.Hms.DTO;
 
+import javax.validation.constraints.NotNull;
+
 public class HallDTO {
+
 
     private String hallName;
     private String hallGender;

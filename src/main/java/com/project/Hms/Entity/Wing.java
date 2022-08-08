@@ -20,11 +20,6 @@ public class Wing {
     private Long wingId;
     private String wingName;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "hallId",
-            nullable = false)
-    @JsonIgnore
-    private Hall hall;
 
     public Wing() {
     }
@@ -34,9 +29,9 @@ public class Wing {
         this.wingName = wingName;
     }
 
-    public Wing(String wingName, Hall hall) {
+    public Wing(String wingName) {
         this.wingName = wingName;
-        this.hall = hall;
+
 
     }
 
@@ -48,12 +43,11 @@ public class Wing {
         this.wingName = wingName;
     }
 
-
-    public Hall getHall() {
-        return hall;
+    public Long getWingId() {
+        return wingId;
     }
 
-    public void setHall(Hall hall) {
-        this.hall = hall;
+    public void setWingId(Long wingId) {
+        this.wingId = wingId;
     }
 }

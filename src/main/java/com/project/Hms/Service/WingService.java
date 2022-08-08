@@ -16,4 +16,7 @@ public class WingService {
         wingRepository.save(wing);
     }
 
+    public Wing findWingByHall(String wingName) {
+        return wingRepository.findWingByName(wingName);
+    }
 }

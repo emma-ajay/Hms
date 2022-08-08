@@ -90,8 +90,8 @@ public class HallController {
 
     //view a hall by name
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_PORTER', 'ROLE_STUDENT')")
-    @GetMapping(path = "/view/{hallName}")
-    public ResponseEntity<GenericResponse> viewHallByName(@PathVariable("hallId") String hallName) {
+    @GetMapping(path = "{hallName}/view")
+    public ResponseEntity<GenericResponse> viewHallByName(@PathVariable  String hallName) {
         try {
             String message = "Request successful";
             Hall hall = hallService.findHallByName(hallName);
@@ -122,8 +122,8 @@ public class HallController {
 
     //view a hall by gender
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_PORTER', 'ROLE_STUDENT')")
-    @GetMapping(path = "/view/{hallGender}")
-    public ResponseEntity<GenericResponse> viewHallByGender(@PathVariable("hallGender") String hallGender) {
+    @GetMapping(path = "/view")
+    public ResponseEntity<GenericResponse> viewHallByGender(@RequestParam(value="hallGender") String hallGender) {
         try {
             String message = "Request successful";
             List<Hall> gender_halls = hallService.findHallsByGender(hallGender);
@@ -228,43 +228,43 @@ public class HallController {
         }
     }
 
-    @PostMapping("add_wing/{hallId}")//change
-    public ResponseEntity<GenericResponse> addWingToHall(@PathVariable("hallId") Long hallId,
-                                                         @RequestBody WingDTO wingDTO) {
-
-        try {
-            String message = "Wing successfully added";
-            Hall hall = hallService.findHallById(hallId);
-
-            if (hall == null) {
-                message = "Hall does not exist";
-                return new ResponseEntity<>(new GenericResponse(
-                        "99", HttpStatus.BAD_REQUEST,
-                        message),
-                        new HttpHeaders(),
-                        HttpStatus.BAD_REQUEST);
-            }
-            Wing wing = new Wing(wingDTO.getWingName(), hall);
-            wingService.save(wing);//necessary?
-
-            hall.getWings().add(wing);
-            //restrict wing creation?
-            return new ResponseEntity<>
-                    (new GenericResponse("00",
-                            HttpStatus.OK,
-                            message,
-                            wing),
-                            new HttpHeaders(),
-                            HttpStatus.CREATED);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(new GenericResponse("99",
-                    HttpStatus.BAD_REQUEST,
-                    e.getLocalizedMessage()),
-                    new HttpHeaders(),
-                    HttpStatus.BAD_REQUEST);
-        }
-
-        }
+//    @PostMapping("add_wing/{hallId}")//change
+//    public ResponseEntity<GenericResponse> addWingToHall(@PathVariable("hallId") Long hallId,
+//                                                         @RequestBody WingDTO wingDTO) {
+//
+//        try {
+//            String message = "Wing successfully added";
+//            Hall hall = hallService.findHallById(hallId);
+//
+//            if (hall == null) {
+//                message = "Hall does not exist";
+//                return new ResponseEntity<>(new GenericResponse(
+//                        "99", HttpStatus.BAD_REQUEST,
+//                        message),
+//                        new HttpHeaders(),
+//                        HttpStatus.BAD_REQUEST);
+//            }
+//            Wing wing = new Wing(wingDTO.getWingName(), hall);
+//            wingService.save(wing);//necessary?
+//
+//            hall.getWings().add(wing);
+//            //restrict wing creation?
+//            return new ResponseEntity<>
+//                    (new GenericResponse("00",
+//                            HttpStatus.OK,
+//                            message,
+//                            wing),
+//                            new HttpHeaders(),
+//                            HttpStatus.CREATED);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return new ResponseEntity<>(new GenericResponse("99",
+//                    HttpStatus.BAD_REQUEST,
+//                    e.getLocalizedMessage()),
+//                    new HttpHeaders(),
+//                    HttpStatus.BAD_REQUEST);
+//        }
+//
+//        }
 
     }
