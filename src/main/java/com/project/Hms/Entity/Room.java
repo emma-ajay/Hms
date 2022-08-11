@@ -25,6 +25,10 @@ public class Room {
     private Long memberCount;
 
 
+    @ManyToOne
+    @JoinColumn(name = "hallId", insertable = false, nullable = false,updatable = false)
+    private Hall hall;
+
     @OneToMany(mappedBy = "room",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     private Set<Report> reportSet;
 

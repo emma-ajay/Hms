@@ -25,6 +25,9 @@ public class Hall {
     @OneToMany(mappedBy = "hall")
     private Set<Report> reportSet;
 
+    @OneToMany(mappedBy = "hall")
+    private Set<Room> roomSet;
+
     public Hall() {
     }
 

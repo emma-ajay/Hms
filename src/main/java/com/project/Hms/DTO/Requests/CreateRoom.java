@@ -3,20 +3,20 @@ package com.project.Hms.DTO.Requests;
 public class CreateRoom {
     private String roomNumber;
 
-    private String hallName;
+    private Long hallId;
 
-    private String floorName;
+    private Long floorId;
 
-    private String wingName;
+    private Long wingId;
 
     public CreateRoom() {
     }
 
-    public CreateRoom(String roomNumber, String hallName, String floorName, String wingName) {
+    public CreateRoom(String roomNumber, Long hallId, Long floorId, Long wingId) {
         this.roomNumber = roomNumber;
-        this.hallName = hallName;
-        this.floorName = floorName;
-        this.wingName = wingName;
+        this.hallId = hallId;
+        this.floorId = floorId;
+        this.wingId = wingId;
     }
 
     public String getRoomNumber() {
@@ -27,27 +27,27 @@ public class CreateRoom {
         this.roomNumber = roomNumber;
     }
 
-    public String getHallName() {
-        return hallName;
+    public Long getHallId() {
+        return hallId;
     }
 
-    public void setHallName(String hallName) {
-        this.hallName = hallName;
+    public void setHallId(Long hallId) {
+        this.hallId = hallId;
     }
 
-    public String getFloorName() {
-        return floorName;
+    public Long getFloorId() {
+        return floorId;
     }
 
-    public void setFloorName(String floorName) {
-        this.floorName = floorName;
+    public void setFloorId(Long floorId) {
+        this.floorId = floorId;
     }
 
-    public String getWingName() {
-        return wingName;
+    public Long getWingId() {
+        return wingId;
     }
 
-    public void setWingName(String wingName) {
-        this.wingName = wingName;
+    public void setWingId(Long wingId) {
+        this.wingId = wingId;
     }
 }

@@ -30,6 +30,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.transaction.Transactional;
 import java.net.URI;
 import java.util.Collections;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -65,7 +66,11 @@ public class AuthenticationController {
 
         String email = signInRequest.getUsernameOrEmail();
         String jwt =tokenProvider.generateToken(authentication);
-        return ResponseEntity.ok(new JwtAuthenticationResponse(jwt,email));
+
+        User user = userRepository.getUserByEmailOrUserName(email);
+        Set<Role> roleSet = user.getRoles();
+
+        return ResponseEntity.ok(new JwtAuthenticationResponse(jwt,email,roleSet));
     }
 
     // Register Student
