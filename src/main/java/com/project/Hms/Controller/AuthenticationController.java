@@ -69,6 +69,7 @@ public class AuthenticationController {
 
         User user = userRepository.getUserByEmailOrUserName(email);
         Set<Role> roleSet = user.getRoles();
+
         return ResponseEntity.ok(new JwtAuthenticationResponse(jwt,email,roleSet));
     }
 

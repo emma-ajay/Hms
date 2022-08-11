@@ -5,11 +5,14 @@ import com.project.Hms.Repository.WingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 
 public class WingService {
     @Autowired
     WingRepository wingRepository;
+
 
 
     public void save(Wing wing){
@@ -19,4 +22,10 @@ public class WingService {
     public Wing findWingByHall(String wingName) {
         return wingRepository.findWingByName(wingName);
     }
+
+    public  Wing findWingById(Long wingId){
+        return wingRepository.findWingById(wingId);
+    }
+
+
 }

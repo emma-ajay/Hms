@@ -33,6 +33,9 @@ public class RoomService {
     WingService wingService;
 
     @Autowired
+    Hall_Wing_Floor_Service hall_wing_floor_service;
+
+    @Autowired
     ModelMapper modelMapper;
 
 
@@ -44,46 +47,44 @@ public class RoomService {
         // create a room
         public ResponseEntity<?> createRoom(CreateRoom room){
         String roomNumber = room.getRoomNumber();
-        String  hallName = room.getHallName();
-        String floorName= room.getFloorName();
-        String wingName = room.getWingName();
+        Long  hallId = room.getHallId();
+        Long floorId= room.getFloorId();
+        Long wingId = room.getWingId();
 
 
         // check if room already exists
-            Room roomCheck = roomRepository.findRoomByRoomNumber(roomNumber);
-            if (roomCheck != null) throw  new BadRequestException("Room already exists");
+            Boolean roomCheck = checkRoomExists(roomNumber);
+            if (roomCheck) throw  new BadRequestException("Room already exists");
 
         // check that hall exist
-            Hall hall = hallService.findHallByName(hallName);
+            Hall hall = hallService.findHallById(hallId);
              if (hall == null) throw  new BadRequestException("hall doesn't exist");
-             Long hallId = hall.getHallId();
 
-        // check that wing exist
-            Wing wing = wingService.findWingByHall(wingName);
-            if (wing == null) throw  new BadRequestException("Wing doesn't exist in hall");
-            Long wingId = wing.getWingId();
+        // check that wing exists in hall
+            Boolean check = hall_wing_floor_service.checkIfWingIsAssignedToHall(hallId,wingId);
+            if (!check) throw  new BadRequestException("Wing doesn't exist in hall");
 
-        // check that floor exist in wing
-            Floor floor = floorService.findFloorByName(floorName);
-            if (floor == null) throw  new BadRequestException("floor doesn't exist in hall");
-            Long floorId = floor.getFloorId();
+        // check that floor exist in wing in hall
+            Boolean check2 = hall_wing_floor_service.checkIfFloorExistInWingHall(hallId,wingId,floorId);
+            if (!check2) throw  new BadRequestException("floor doesn't exist in hall");
 
-            Room roomCreated = modelMapper.map(room, Room.class);
+
+        //    Room roomCreated = modelMapper.map(room, Room.class);
+            Room roomCreated = new Room();
+            roomCreated.setRoomNumber(roomNumber);
+            roomCreated.setHallId(hallId);
+            roomCreated.setWingId(wingId);
+            roomCreated.setFloorId(floorId);
             roomCreated.setFull(Boolean.FALSE);
             roomCreated.setReserved(Boolean.FALSE);
             roomCreated.setMemberCount(0L);
-            roomCreated.setRoomNumber(roomNumber);
-            roomCreated.setFloorId(floorId);
-            roomCreated.setHallId(hallId);
-            roomCreated.setWingId(wingId);
             Room rs = roomRepository.save(roomCreated);
-
 
         return  ResponseEntity.ok(new GenericResponse("00",
                 HttpStatus.OK,
-                "Room number "+ roomNumber + "created  in hall " + hallName + " wing " + wingName + "floor " + floorName  ,
+                "Room number "+ roomNumber + "created  in hall " + hallId + " wing " + wingId + " floor  " + floorId  ,
                 room,
-                HttpStatus.OK));
+                HttpStatus.CREATED));
     }
 
 
@@ -133,9 +134,9 @@ public class RoomService {
 
     }
 
-    //view all rooms in a wing
+    //view all rooms in a wing in a hall
 
-    // view all rooms in a floor
+    // view all rooms in a floor in a wing in a hall
 
     // view all rooms that are not full in a hall
 
@@ -170,7 +171,10 @@ public class RoomService {
             Room room = findById(roomId);
             Long currentCount = room.getMemberCount();
             Long newCount = currentCount + 1;
-            roomRepository.updateMemberCount(newCount,roomId);
+            room.setRoomId(room.getRoomId());
+            room.setMemberCount(currentCount);
+          Room rs = roomRepository.save(room);
+        //    roomRepository.updateMemberCount(newCount,roomId);
     }
 
 }

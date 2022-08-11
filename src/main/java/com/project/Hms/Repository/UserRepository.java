@@ -31,6 +31,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
 
     @Modifying
-    @Query("UPDATE User u  SET u.roomId =?1 WHERE u.id=?1")
+    @Query("UPDATE User u  SET u.roomId = ?1 WHERE u.id= ?1")
     void updateUserRoom(Long roomId, Long userId);
 }

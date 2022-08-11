@@ -46,8 +46,18 @@ public class UserService {
         Boolean check = roomService.isRoomFull(roomId);
         if(check) throw  new BadRequestException("Room is full");
 
+        // find user by id
+        User user = userRepository.findByUserId(userId);
+
+        user.setRoomId(roomId);
+
+
+
         // Enter user into room
-        userRepository.updateUserRoom(roomId,userId);
+        user.setId(user.getId());
+        user.setUserName(user.getUserName());
+        user.setEmail(user.getEmail());
+        User rs = userRepository.save(user);
 
         // Increase member count
         roomService.increaseMemberCount(roomId);
@@ -56,7 +66,6 @@ public class UserService {
         return  ResponseEntity.ok(new GenericResponse("00",
                 HttpStatus.OK,
                 "User with user id " + userId +" has been added to room " + roomId,
-               room,
                 HttpStatus.OK));
 
     }
