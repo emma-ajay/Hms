@@ -1,12 +1,13 @@
 package com.project.Hms.Controller;
-import com.project.Hms.DTO.HallDTO;
+import com.project.Hms.DTO.Requests.CreateHall;
+import com.project.Hms.DTO.Requests.CreateWing;
 import com.project.Hms.DTO.Response.GenericResponse;
-import com.project.Hms.DTO.WingDTO;
 import com.project.Hms.Entity.Hall;
 import com.project.Hms.Entity.Wing;
 import com.project.Hms.Service.HallService;
 import com.project.Hms.Service.WingService;
 import com.project.Hms.mapper.HallMapper;
+import com.project.Hms.mapper.WingMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -24,6 +25,10 @@ public class HallController {
 
     @Autowired
     private HallMapper hallMapper;
+
+    @Autowired
+    private WingMapper wingMapper;
+
 
     @Autowired
     private WingService wingService;
@@ -122,7 +127,7 @@ public class HallController {
 
     //view a hall by gender
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_PORTER', 'ROLE_STUDENT')")
-    @GetMapping(path = "/view")
+    @GetMapping(path = "{hallGender}/view")
     public ResponseEntity<GenericResponse> viewHallByGender(@RequestParam(value="hallGender") String hallGender) {
         try {
             String message = "Request successful";
@@ -148,14 +153,13 @@ public class HallController {
     }
 
     //create a hall
-
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/create_hall")
     public ResponseEntity<GenericResponse> createAHall(
-            @RequestBody HallDTO createHallDTO) {
+            @RequestBody CreateHall CreateHall) {
         try {
 
-            Hall hall = hallService.findHallByName(createHallDTO.getHallName()); //what of casing?
+            Hall hall = hallService.findHallByName(CreateHall.getHallName()); //what of casing?
 
             if (hall != null) {
 
@@ -169,7 +173,7 @@ public class HallController {
 //            LocalDateTime localDateTime = LocalDateTime.now();
 //            String dateTime = localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
-            hall = hallMapper.toHall(createHallDTO);
+            hall = hallMapper.toHall(CreateHall);
             hallService.save(hall);
 
             return new ResponseEntity<>(new GenericResponse(
@@ -191,11 +195,10 @@ public class HallController {
     }
 
     //update a hall
-
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/update_Hall/{hallId}")
     public ResponseEntity<GenericResponse> updateHall(@PathVariable("hallId") Long hallId,
-                                                      @RequestBody HallDTO updateHallDTO) {// request params instead
+                                                      @RequestBody CreateHall updateCreateHall) {// request params instead
 
         try {
             String message = "Hall updated successfully";
@@ -215,7 +218,7 @@ public class HallController {
                     (new GenericResponse("00",
                             HttpStatus.OK,
                             message,
-                            hallService.updateHall(hall, updateHallDTO)),
+                            hallService.updateHall(hall, updateCreateHall)),
                             new HttpHeaders(),
                             HttpStatus.OK);
         } catch (Exception e) {
@@ -267,4 +270,109 @@ public class HallController {
 //
 //        }
 
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping("/create_wing")
+    public ResponseEntity<GenericResponse> createAWing(
+            @RequestBody CreateWing createWing) {
+        try {
+
+            Wing wing = wingService.findWingByHall(createWing.getWingName()); //what of casing?
+
+            if (wing != null) {
+
+                return new ResponseEntity<>(new GenericResponse(
+                        "99", HttpStatus.BAD_REQUEST,
+                        "Wing Already Exists"),
+                        new HttpHeaders(),
+                        HttpStatus.BAD_REQUEST);
+            }
+//
+//            LocalDateTime localDateTime = LocalDateTime.now();
+//            String dateTime = localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+
+            wing = wingMapper.toWing(createWing);
+            wingService.save(wing);
+
+            return new ResponseEntity<>(new GenericResponse(
+                    "00", HttpStatus.CREATED,
+                    "Wing Created Successfully", wing),
+                    new HttpHeaders(),
+                    HttpStatus.CREATED);
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+            return new ResponseEntity<>(new GenericResponse(
+                    "99",
+                    HttpStatus.BAD_REQUEST,
+                    e.getLocalizedMessage()),
+                    new HttpHeaders(),
+                    HttpStatus.BAD_REQUEST);
+        }
     }
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_PORTER', 'ROLE_STUDENT')")
+    @GetMapping(path = "/viewWings")
+    public ResponseEntity<GenericResponse> viewWings() {
+        try {
+            String message = "Request successful";
+            if (wingService.getAllWings() == null) {
+                message = "No Wings Available";
+            }
+
+            return new ResponseEntity<>
+                    (new GenericResponse("00",
+                            HttpStatus.OK,
+                            message,
+                            wingService.getAllWings()),
+                            new HttpHeaders(),
+                            HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(new GenericResponse("99",
+                    HttpStatus.BAD_REQUEST,
+                    e.getLocalizedMessage()),
+                    new HttpHeaders(),
+                    HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PutMapping("/update_wing/{wingId}")
+    public ResponseEntity<GenericResponse> updateWing(@PathVariable("wingId") Long wingId,
+                                                      @RequestBody CreateWing updateWing) {// request params instead
+
+        try {
+            String message = "Wing updated successfully";
+            Wing wing = wingService.getById(wingId);
+
+            if (wing == null) {
+                message = "Wing does not exist";
+                return new ResponseEntity<>(new GenericResponse(
+                        "99", HttpStatus.BAD_REQUEST,
+                        message),
+                        new HttpHeaders(),
+                        HttpStatus.BAD_REQUEST);
+            }
+
+            //last modified?
+            return new ResponseEntity<>
+                    (new GenericResponse("00",
+                            HttpStatus.OK,
+                            message,
+                            wingService.updateWing(wing, updateWing)),
+                            new HttpHeaders(),
+                            HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(new GenericResponse("99",
+                    HttpStatus.BAD_REQUEST,
+                    e.getLocalizedMessage()),
+                    new HttpHeaders(),
+                    HttpStatus.BAD_REQUEST);
+        }
+
+    }
+
+}

@@ -13,8 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -105,8 +105,7 @@ public class RoomService {
 
     // view room by room number
     public  Room findRoomByRoomNumber(String roomNumber){
-            Room room = roomRepository.findRoomByRoomNumber(roomNumber);
-            return  room;
+        return roomRepository.findRoomByRoomNumber(roomNumber);
     }
     // view all rooms
     public  ResponseEntity<?> viewAllRooms(){
@@ -153,16 +152,9 @@ public class RoomService {
 
         Long hallCapacity = hall.getHallCapacity();
 
-        if (members == hallCapacity){
-            return true;
-        }
-
-        else {
-            return false;
-        }
+        return Objects.equals(members, hallCapacity);
 
     }
-
 
     // increase member count by one when a user is added to room
 

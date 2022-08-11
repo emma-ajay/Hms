@@ -96,7 +96,7 @@ public class GenericResponse {
 
     @Override
     public String toString() {
-        return "GenericResponose{" +
+        return "GenericResponse{" +
                 "code='" + code + '\'' +
                 ", httpStatus=" + httpStatus +
                 ", message='" + message + '\'' +

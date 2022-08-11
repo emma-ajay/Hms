@@ -1,7 +1,5 @@
 package com.project.Hms.Entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
 
 @Entity
@@ -19,18 +17,21 @@ public class Wing {
 
     private Long wingId;
     private String wingName;
+    private Boolean isReserved;
 
 
     public Wing() {
     }
 
-    public Wing(Long wingId, String wingName, Hall hall) {
+    public Wing(Long wingId, String wingName, Boolean isReserved) {
         this.wingId = wingId;
         this.wingName = wingName;
+        this.isReserved = isReserved;
     }
 
-    public Wing(String wingName) {
+    public Wing(String wingName, Boolean isReserved) {
         this.wingName = wingName;
+        this.isReserved = isReserved;
 
 
     }
@@ -49,5 +50,13 @@ public class Wing {
 
     public void setWingId(Long wingId) {
         this.wingId = wingId;
+    }
+
+    public Boolean getReserved() {
+        return isReserved;
+    }
+
+    public void setReserved(Boolean reserved) {
+        isReserved = reserved;
     }
 }

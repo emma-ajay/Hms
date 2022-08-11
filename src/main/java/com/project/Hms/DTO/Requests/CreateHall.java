@@ -1,8 +1,6 @@
-package com.project.Hms.DTO;
+package com.project.Hms.DTO.Requests;
 
-import javax.validation.constraints.NotNull;
-
-public class HallDTO {
+public class CreateHall {
 
 
     private String hallName;

@@ -1,13 +1,12 @@
 package com.project.Hms.Service;
 
-import com.project.Hms.DTO.HallDTO;
+import com.project.Hms.DTO.Requests.CreateHall;
 import com.project.Hms.Entity.Hall;
 import com.project.Hms.Repository.HallRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class HallService {
@@ -35,11 +34,11 @@ public class HallService {
         return hallRepository.findHallsByGender(hallGender);
     }
 
-    public Hall updateHall(Hall hall, HallDTO updateHallDTO){
-        hall.setHallName(updateHallDTO.getHallName());
-        hall.setHallGender(updateHallDTO.getHallGender());
-        hall.setHallCapacity(updateHallDTO.getHallCapacity());
-        hall.setReserved(updateHallDTO.getReserved());
+    public Hall updateHall(Hall hall, CreateHall updateCreateHall){
+        hall.setHallName(updateCreateHall.getHallName());
+        hall.setHallGender(updateCreateHall.getHallGender());
+        hall.setHallCapacity(updateCreateHall.getHallCapacity());
+        hall.setReserved(updateCreateHall.getReserved());
         return hall;
 
     }

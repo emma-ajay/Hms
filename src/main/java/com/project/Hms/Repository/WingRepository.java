@@ -8,4 +8,9 @@ public interface WingRepository extends JpaRepository<Wing, Long> {
 
     @Query("SELECT u FROM Wing u WHERE u.wingName=?1")
     Wing findWingByName(String wingName);
+
+    @Query("SELECT u FROM Wing u WHERE u.wingId=?1")
+    Wing getWingById(Long wingId);
+
+
 }

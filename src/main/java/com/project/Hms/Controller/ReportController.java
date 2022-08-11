@@ -9,7 +9,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -78,11 +77,5 @@ public class ReportController {
         Long userId = currentUser.getId();
         return reportService.resolveReport(id,userId);
     }
-
-
-
-
-
-
 
 }

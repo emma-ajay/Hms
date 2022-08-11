@@ -1,6 +1,6 @@
 package com.project.Hms.mapper;
 
-import com.project.Hms.DTO.HallDTO;
+import com.project.Hms.DTO.Requests.CreateHall;
 import com.project.Hms.Entity.Hall;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -9,5 +9,5 @@ import org.mapstruct.Mapping;
 public interface HallMapper {
 
     @Mapping(source = "hallName", target = "hallName")
-    Hall toHall(HallDTO createHallDTO);
+    Hall toHall(CreateHall CreateHall);
 }
