@@ -17,15 +17,17 @@ public class Floor {
 
     private Long floorId;
     private String floorName;
+    private Boolean isReserved;
 
 
 
     public Floor() {
     }
 
-    public Floor(Long floorId, String floorName) {
+    public Floor(Long floorId, String floorName, Boolean isReserved) {
         this.floorId = floorId;
         this.floorName = floorName;
+        this.isReserved = isReserved;
     }
 
     public String getFloorName() {
@@ -42,5 +44,13 @@ public class Floor {
 
     public void setFloorId(Long floorId) {
         this.floorId = floorId;
+    }
+
+    public Boolean getReserved() {
+        return isReserved;
+    }
+
+    public void setReserved(Boolean reserved) {
+        isReserved = reserved;
     }
 }

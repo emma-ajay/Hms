@@ -54,6 +54,7 @@ public class GenericResponse {
         this.message = message;
     }
 
+
     public String getCode() {
         return code;
     }
@@ -96,7 +97,7 @@ public class GenericResponse {
 
     @Override
     public String toString() {
-        return "GenericResponose{" +
+        return "GenericResponse{" +
                 "code='" + code + '\'' +
                 ", httpStatus=" + httpStatus +
                 ", message='" + message + '\'' +

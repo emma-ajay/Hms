@@ -1,8 +1,6 @@
-package com.project.Hms.DTO;
+package com.project.Hms.DTO.Requests;
 
-import javax.validation.constraints.NotNull;
-
-public class HallDTO {
+public class CreateHall {
 
 
     private String hallName;
@@ -39,7 +37,7 @@ public class HallDTO {
     }
 
     public void setReserved(Boolean reserved) {
-        isReserved = reserved;
+        this.isReserved = reserved;
     }
 
 

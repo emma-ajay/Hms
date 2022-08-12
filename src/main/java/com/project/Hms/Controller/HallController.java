@@ -1,10 +1,11 @@
 package com.project.Hms.Controller;
-import com.project.Hms.DTO.HallDTO;
+
+import com.project.Hms.DTO.Requests.CreateHall;
 import com.project.Hms.DTO.Response.GenericResponse;
-import com.project.Hms.DTO.WingDTO;
 import com.project.Hms.Entity.Hall;
 import com.project.Hms.Entity.Wing;
 import com.project.Hms.Service.HallService;
+import com.project.Hms.Service.Hall_Wing_Floor_Service;
 import com.project.Hms.Service.WingService;
 import com.project.Hms.mapper.HallMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -23,10 +26,13 @@ public class HallController {
     private HallService hallService;
 
     @Autowired
+    private WingService wingService;
+
+    @Autowired
     private HallMapper hallMapper;
 
     @Autowired
-    private WingService wingService;
+    Hall_Wing_Floor_Service hall_wing_floor_service;
 
 
     // view all halls
@@ -91,7 +97,7 @@ public class HallController {
     //view a hall by name
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_PORTER', 'ROLE_STUDENT')")
     @GetMapping(path = "{hallName}/view")
-    public ResponseEntity<GenericResponse> viewHallByName(@PathVariable  String hallName) {
+    public ResponseEntity<GenericResponse> viewHallByName(@PathVariable String hallName) {
         try {
             String message = "Request successful";
             Hall hall = hallService.findHallByName(hallName);
@@ -122,8 +128,8 @@ public class HallController {
 
     //view a hall by gender
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_PORTER', 'ROLE_STUDENT')")
-    @GetMapping(path = "/view")
-    public ResponseEntity<GenericResponse> viewHallByGender(@RequestParam(value="hallGender") String hallGender) {
+    @GetMapping(path = "{hallGender}/viewByGender")
+    public ResponseEntity<GenericResponse> viewHallByGender(@PathVariable String hallGender) {
         try {
             String message = "Request successful";
             List<Hall> gender_halls = hallService.findHallsByGender(hallGender);
@@ -148,14 +154,13 @@ public class HallController {
     }
 
     //create a hall
-
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/create_hall")
     public ResponseEntity<GenericResponse> createAHall(
-            @RequestBody HallDTO createHallDTO) {
+            @RequestBody CreateHall CreateHall) {
         try {
 
-            Hall hall = hallService.findHallByName(createHallDTO.getHallName()); //what of casing?
+            Hall hall = hallService.findHallByName(CreateHall.getHallName()); //what of casing?
 
             if (hall != null) {
 
@@ -169,7 +174,7 @@ public class HallController {
 //            LocalDateTime localDateTime = LocalDateTime.now();
 //            String dateTime = localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
-            hall = hallMapper.toHall(createHallDTO);
+            hall = hallMapper.toHall(CreateHall);
             hallService.save(hall);
 
             return new ResponseEntity<>(new GenericResponse(
@@ -191,11 +196,10 @@ public class HallController {
     }
 
     //update a hall
-
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/update_Hall/{hallId}")
     public ResponseEntity<GenericResponse> updateHall(@PathVariable("hallId") Long hallId,
-                                                      @RequestBody HallDTO updateHallDTO) {// request params instead
+                                                      @RequestBody CreateHall updateCreateHall) {// request params instead
 
         try {
             String message = "Hall updated successfully";
@@ -215,7 +219,7 @@ public class HallController {
                     (new GenericResponse("00",
                             HttpStatus.OK,
                             message,
-                            hallService.updateHall(hall, updateHallDTO)),
+                            hallService.updateHall(hall, updateCreateHall)),
                             new HttpHeaders(),
                             HttpStatus.OK);
         } catch (Exception e) {
@@ -228,43 +232,57 @@ public class HallController {
         }
     }
 
-//    @PostMapping("add_wing/{hallId}")//change
-//    public ResponseEntity<GenericResponse> addWingToHall(@PathVariable("hallId") Long hallId,
-//                                                         @RequestBody WingDTO wingDTO) {
-//
-//        try {
-//            String message = "Wing successfully added";
-//            Hall hall = hallService.findHallById(hallId);
-//
-//            if (hall == null) {
-//                message = "Hall does not exist";
-//                return new ResponseEntity<>(new GenericResponse(
-//                        "99", HttpStatus.BAD_REQUEST,
-//                        message),
-//                        new HttpHeaders(),
-//                        HttpStatus.BAD_REQUEST);
-//            }
-//            Wing wing = new Wing(wingDTO.getWingName(), hall);
-//            wingService.save(wing);//necessary?
-//
-//            hall.getWings().add(wing);
-//            //restrict wing creation?
-//            return new ResponseEntity<>
-//                    (new GenericResponse("00",
-//                            HttpStatus.OK,
-//                            message,
-//                            wing),
-//                            new HttpHeaders(),
-//                            HttpStatus.CREATED);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return new ResponseEntity<>(new GenericResponse("99",
-//                    HttpStatus.BAD_REQUEST,
-//                    e.getLocalizedMessage()),
-//                    new HttpHeaders(),
-//                    HttpStatus.BAD_REQUEST);
-//        }
-//
-//        }
+    //review!!
+    @GetMapping(path = "/{hallId}/wings")
+    public  ResponseEntity<GenericResponse> getWingsInHall(@PathVariable Long hallId){
 
+        try{
+
+            String message = "Request successful";
+            Hall hall = hallService.findHallById(hallId);
+            if (hall == null) {
+                message = "Hall does not exist";
+                return new ResponseEntity<>(new GenericResponse(
+                        "99", HttpStatus.BAD_REQUEST,
+                        message),
+                        new HttpHeaders(),
+                        HttpStatus.BAD_REQUEST);
+            }
+            List<Long> wingsIds = hall_wing_floor_service.viewAllWingsInHall(hallId);
+            List<Wing> wingsInHall = new ArrayList<>();
+            for (Long i : wingsIds){
+                Wing wing = wingService.findWingById(i);
+                wingsInHall.add(wing);
+            }
+
+            return new ResponseEntity<>
+                    (new GenericResponse("00",
+                            HttpStatus.OK,
+                            message,
+                            wingsInHall),
+                            new HttpHeaders(),
+                            HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(new GenericResponse("99",
+                    HttpStatus.BAD_REQUEST,
+                    e.getLocalizedMessage()),
+                    new HttpHeaders(),
+                    HttpStatus.BAD_REQUEST);
+        }
     }
+
+//TODO get all floors in a wing
+    @PostMapping(path = "/assign/{hallId}/{wingId}")
+    public ResponseEntity<?> assignWingToHall(@PathVariable Long hallId, @PathVariable Long wingId){
+        return  hall_wing_floor_service.assignWingToHall(hallId,wingId);
+    }
+
+    @PostMapping(path = "/assign/{hallId}/{wingId}/{floorId}")
+    public ResponseEntity<?> assignFloorToWingHall(@PathVariable Long hallId, @PathVariable Long wingId,@PathVariable Long floorId){
+        return  hall_wing_floor_service.assignFloorToWingHall(hallId,wingId,floorId);
+    }
+
+
+
+}

@@ -21,7 +21,6 @@ public class RoomController {
     @GetMapping("/{id}")
     public ResponseEntity<?> findRoomById(@PathVariable Long id){
         return roomService.findRoomById(id);
-
     }
 
     @GetMapping(path = "/all")
