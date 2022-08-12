@@ -58,9 +58,22 @@ public class UserService {
         User user = userRepository.findByUserId(userId);
 
 
-        // check if user is already in the room
+        // check if user is already in this particular room
         Long roomNum = user.getRoomId();
         if (Objects.equals(roomNum, roomId)) throw new BadRequestException("You are already in this room");
+
+        // check if user was in a previous room and is moving
+        // previous room count to be decreased and must be set to not full
+        if(Objects.nonNull(roomNum)){
+            roomService.decreaseMemberCount(roomNum);
+
+                Room room1 = roomService.findById(roomNum);
+                room1.setRoomId(roomNum);
+                room1.setFull(Boolean.FALSE);
+            roomService.roomRepository.save(room1);
+
+
+        }
 
         // check users gender
         String gender = user.getGender();
@@ -86,6 +99,7 @@ public class UserService {
         if(check2){
             room.setRoomId(room.getRoomId());
             room.setFull(Boolean.TRUE);
+            roomService.roomRepository.save(room);
         }
 
 

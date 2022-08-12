@@ -168,4 +168,17 @@ public class RoomService {
         return room;
     }
 
+    public Room decreaseMemberCount(Long roomId){
+        Room room = findById(roomId);
+        Long currentCount = room.getMemberCount();
+        Long newCount = currentCount - 1;
+        room.setRoomId(room.getRoomId());
+        room.setMemberCount(newCount);
+        Room rs = roomRepository.save(room);
+        //    roomRepository.updateMemberCount(newCount,roomId);
+        return room;
+    }
+
+
+
 }
