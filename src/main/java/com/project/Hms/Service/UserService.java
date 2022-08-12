@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Objects;
+
 @Service
 
 public class UserService {
@@ -55,10 +57,15 @@ public class UserService {
         // find user by id
         User user = userRepository.findByUserId(userId);
 
+
+        // check if user is already in the room
+        Long roomNum = user.getRoomId();
+        if (Objects.equals(roomNum, roomId)) throw new BadRequestException("You are already in this room");
+
         // check users gender
         String gender = user.getGender();
         String hallGender = hall.getHallGender();
-        if(gender!= hallGender) throw new BadRequestException("This hall isn't meant for your gender");
+        if(!gender.equals(hallGender)) throw new BadRequestException("This hall isn't meant for your gender");
 
         // check if room is full
         Boolean check = roomService.isRoomFull(roomId);
@@ -73,6 +80,14 @@ public class UserService {
 
         // Increase member count
         Room room1 = roomService.increaseMemberCount(roomId);
+
+        // check if room is full again
+        Boolean check2 = roomService.isRoomFull(roomId);
+        if(check2){
+            room.setRoomId(room.getRoomId());
+            room.setFull(Boolean.TRUE);
+        }
+
 
 
         return  ResponseEntity.ok(new GenericResponse("00",
