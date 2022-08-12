@@ -13,6 +13,7 @@ public interface Hall_Wing_FloorRepository extends JpaRepository<Hall_Wing_Floor
     @Query("SELECT u FROM Hall_Wing_Floor u WHERE u.hallId =?1 AND u.wingId =?1")
     List<Hall_Wing_Floor> getAssignedHallWingById(Long hallId, Long wingId);
 
+
     @Query("SELECT DISTINCT wingId FROM Hall_Wing_Floor u WHERE u.hallId =?1 ")
     List<Long> viewAllWingsInHall(Long hallId);
 

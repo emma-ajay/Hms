@@ -1,9 +1,12 @@
 package com.project.Hms.Controller;
 
 
+
 import com.project.Hms.DTO.Requests.CreateWing;
 import com.project.Hms.DTO.Response.GenericResponse;
 import com.project.Hms.Entity.Wing;
+import com.project.Hms.Entity.Wing;
+import com.project.Hms.Service.Hall_Wing_Floor_Service;
 import com.project.Hms.Service.WingService;
 import com.project.Hms.mapper.WingMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,6 +62,10 @@ public class WingController {
                     new HttpHeaders(),
                     HttpStatus.BAD_REQUEST);
         }
+
+    @GetMapping(path = "/{hallId}/hall")
+    public List<Wing> getWingsInHall(@PathVariable Long hallId){
+        return hall_wing_floor_service.viewAllWingsInHall(hallId);
 
     }
 

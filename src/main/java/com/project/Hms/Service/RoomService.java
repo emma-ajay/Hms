@@ -2,10 +2,8 @@ package com.project.Hms.Service;
 
 import com.project.Hms.DTO.Requests.CreateRoom;
 import com.project.Hms.DTO.Response.GenericResponse;
-import com.project.Hms.Entity.Floor;
 import com.project.Hms.Entity.Hall;
 import com.project.Hms.Entity.Room;
-import com.project.Hms.Entity.Wing;
 import com.project.Hms.Exceptions.BadRequestException;
 import com.project.Hms.Repository.RoomRepository;
 import org.modelmapper.ModelMapper;
@@ -159,14 +157,15 @@ public class RoomService {
 
     // increase member count by one when a user is added to room
 
-    public void  increaseMemberCount(Long roomId){
+    public Room increaseMemberCount(Long roomId){
             Room room = findById(roomId);
             Long currentCount = room.getMemberCount();
             Long newCount = currentCount + 1;
             room.setRoomId(room.getRoomId());
-            room.setMemberCount(currentCount);
+            room.setMemberCount(newCount);
           Room rs = roomRepository.save(room);
         //    roomRepository.updateMemberCount(newCount,roomId);
+        return room;
     }
 
 }
