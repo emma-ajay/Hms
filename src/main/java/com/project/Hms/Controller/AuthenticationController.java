@@ -30,6 +30,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.transaction.Transactional;
 import java.net.URI;
 import java.util.Collections;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -65,7 +66,11 @@ public class AuthenticationController {
 
         String email = signInRequest.getUsernameOrEmail();
         String jwt =tokenProvider.generateToken(authentication);
-        return ResponseEntity.ok(new JwtAuthenticationResponse(jwt,email));
+
+        User user = userRepository.getUserByEmailOrUserName(email);
+        Set<Role> roleSet = user.getRoles();
+
+        return ResponseEntity.ok(new JwtAuthenticationResponse(jwt,email,roleSet));
     }
 
     // Register Student
@@ -126,5 +131,37 @@ public class AuthenticationController {
         User result = userRepository.save(user);
 
         return ResponseEntity.ok(new ApiResponse(true, "User registered successfully",result.getId(),"User (porter)"));
+    }
+    @Transactional
+    @PostMapping("/register/admin")
+    public ResponseEntity<? > registerAdmin(@RequestBody RegisterRequest registerRequest){
+
+        if(userRepository.existsByUserName(registerRequest.getUserName())) {
+            return new ResponseEntity(new ApiResponse(false, "Username already in use!"),
+                    HttpStatus.BAD_REQUEST);
+        }
+        if(userRepository.existsByEmail(registerRequest.getEmail())) {
+            return new ResponseEntity(new ApiResponse(false, "Email Address already in use!"),
+                    HttpStatus.BAD_REQUEST);
+        }
+
+
+
+        User user = modelMapper.map(registerRequest,User.class);
+        String password =passwordEncoder.encode(registerRequest.getPassword());
+        user.setPassword(password);
+
+        Role userRole = roleRepository.findByName(RoleName.ROLE_ADMIN)
+                .orElseThrow(() -> new AppException("User Role Admin not set."));
+
+        user.setRoles(Collections.singleton(userRole));
+
+
+
+        User result = userRepository.save(user);
+
+
+
+        return ResponseEntity.ok(new ApiResponse(true, "User registered successfully",result.getId(),"User (Admin)"));
     }
 }
