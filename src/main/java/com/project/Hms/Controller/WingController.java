@@ -1,6 +1,7 @@
 package com.project.Hms.Controller;
 
 
+import com.project.Hms.Entity.Wing;
 import com.project.Hms.Service.Hall_Wing_Floor_Service;
 import com.project.Hms.Service.WingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,7 @@ public class WingController {
     Hall_Wing_Floor_Service hall_wing_floor_service;
 
     @GetMapping(path = "/{hallId}/hall")
-    public List<Long> getWingsInHall(@PathVariable Long hallId){
+    public List<Wing> getWingsInHall(@PathVariable Long hallId){
         return hall_wing_floor_service.viewAllWingsInHall(hallId);
     }
 }

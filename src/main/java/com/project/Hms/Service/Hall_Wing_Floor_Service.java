@@ -7,6 +7,7 @@ import com.project.Hms.Entity.Hall_Wing_Floor;
 import com.project.Hms.Entity.Wing;
 import com.project.Hms.Exceptions.BadRequestException;
 import com.project.Hms.Repository.Hall_Wing_FloorRepository;
+import com.sun.xml.bind.v2.model.core.WildcardMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -92,8 +93,18 @@ public class Hall_Wing_Floor_Service {
     }
 
     // view all wings in a hall
-    public List<Long> viewAllWingsInHall(Long hallId) {
-        return hall_wing_floorRepository.viewAllWingsInHall(hallId);
+    public List<Wing> viewAllWingsInHall(Long hallId) {
+        List<Long> wingListId = hall_wing_floorRepository.viewAllWingsInHall(hallId);
+        List<Wing> wingList = new ArrayList<>();
+        int size = wingListId.size();
+        for(int i  =0; i<size; i++){
+            Long wingId = wingListId.get(i);
+            Wing wing = wingService.findWingById(wingId);
+            wingList.add(i,wing);
+        }
+
+
+        return wingList;
     }
 
     // view all floors in a wing belonging to hall
