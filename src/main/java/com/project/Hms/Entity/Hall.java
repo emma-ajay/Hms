@@ -1,6 +1,6 @@
 package com.project.Hms.Entity;
+
 import javax.persistence.*;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -81,7 +81,7 @@ public class Hall {
     }
 
     public void setReserved(Boolean reserved) {
-        isReserved = reserved;
+        this.isReserved = reserved;
     }
 
 

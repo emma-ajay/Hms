@@ -54,6 +54,7 @@ public class GenericResponse {
         this.message = message;
     }
 
+
     public String getCode() {
         return code;
     }

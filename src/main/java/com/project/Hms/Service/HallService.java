@@ -39,6 +39,7 @@ public class HallService {
         hall.setHallGender(updateCreateHall.getHallGender());
         hall.setHallCapacity(updateCreateHall.getHallCapacity());
         hall.setReserved(updateCreateHall.getReserved());
+        hallRepository.save(hall);
         return hall;
 
     }

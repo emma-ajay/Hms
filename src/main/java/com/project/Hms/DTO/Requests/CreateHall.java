@@ -37,7 +37,7 @@ public class CreateHall {
     }
 
     public void setReserved(Boolean reserved) {
-        isReserved = reserved;
+        this.isReserved = reserved;
     }
 
 

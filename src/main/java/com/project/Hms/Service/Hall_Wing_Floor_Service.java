@@ -47,7 +47,7 @@ public class Hall_Wing_Floor_Service {
                 HttpStatus.OK));
     }
 
-    // assign floor to wing hall
+    // assign floor to wing in hall
     public ResponseEntity<?> assignFloorToWingHall(Long hallId , Long wingId, Long floorId){
 
         // check if wing is assigned to hall

@@ -1,9 +1,12 @@
 package com.project.Hms.Service;
 
+import com.project.Hms.DTO.Requests.CreateWing;
 import com.project.Hms.Entity.Wing;
 import com.project.Hms.Repository.WingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 
@@ -19,4 +22,27 @@ public class WingService {
     public Wing findWingByHall(String wingName) {
         return wingRepository.findWingByName(wingName);
     }
+
+
+    public  Wing findWingById(Long wingId){
+        return wingRepository.findWingById(wingId);
+    }
+
+
+    public List<Wing> getWingsByHall() {
+        return wingRepository.findAll();
+    }
+
+    public List<Wing> getAllWings() {
+        return null;
+    }
+
+    public Wing updateWing(Wing wing, CreateWing updateWingDTO){
+        wing.setWingName(updateWingDTO.getWingName());
+        wing.setReserved(updateWingDTO.getReserved());
+        wingRepository.save(wing);
+        return wing;
+    }
 }
+
+
