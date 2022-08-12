@@ -62,12 +62,13 @@ public class WingController {
                     new HttpHeaders(),
                     HttpStatus.BAD_REQUEST);
         }
-
-    @GetMapping(path = "/{hallId}/hall")
-    public List<Wing> getWingsInHall(@PathVariable Long hallId){
-        return hall_wing_floor_service.viewAllWingsInHall(hallId);
-
     }
+
+//    @GetMapping(path = "/{hallId}/hall")
+//    public List<Wing> getWingsInHall(@PathVariable Long hallId){
+//        return hall_wing_floor_service.viewAllWingsInHall(hallId);
+//
+//    }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/create_wing")

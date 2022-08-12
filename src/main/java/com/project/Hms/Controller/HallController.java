@@ -248,12 +248,7 @@ public class HallController {
                         new HttpHeaders(),
                         HttpStatus.BAD_REQUEST);
             }
-            List<Long> wingsIds = hall_wing_floor_service.viewAllWingsInHall(hallId);
-            List<Wing> wingsInHall = new ArrayList<>();
-            for (Long i : wingsIds){
-                Wing wing = wingService.findWingById(i);
-                wingsInHall.add(wing);
-            }
+            List<Wing> wingsInHall = hall_wing_floor_service.viewAllWingsInHall(hallId);
 
             return new ResponseEntity<>
                     (new GenericResponse("00",
