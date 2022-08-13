@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -110,10 +111,9 @@ public class ReportService {
     }
 
     // view all Reports by Hall
-    public ResponseEntity<?> viewAllReportsByHall(String hallName){
-        Hall hall = hallService.findHallByName(hallName);
-        if(hall== null) throw new BadRequestException("Hall doesn't exist");
-        Long hallId = hall.getHallId();
+    public ResponseEntity<?> viewAllReportsByHall(Long hallId){
+        Hall hall = hallService.findHallById(hallId);
+        if(Objects.isNull(hall)) throw new BadRequestException("Hall doesn't exist");
         List<Report> reportList = reportRepository.findReportsByHallId(hallId);
         return ResponseEntity.ok( new GenericResponse("00",
                 HttpStatus.OK,
@@ -155,21 +155,18 @@ public class ReportService {
 
 
         // Ensure User updating the report is the creator
-        //Ensure the report exists
-        try{
-            Report rs = reportRepository.findReportsByReportId(reportId);
-            Long id = rs.getUserId();
-            if(id!=userId) throw  new BadRequestException("Only the student that created the report can update it");
+            Long id = report1.getUserId();
+            if(!Objects.equals(id, userId)) throw  new BadRequestException("Only the student that created the report can update it");
 
-        }
-        catch (BadRequestException ex){
-            throw new BadRequestException("Report doesn't exist");
-        }
+
 
         // get date time  when the report is resolved
         LocalDateTime localDateTime = LocalDateTime.now();
         String dateTime = localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        reportRepository.resolveReport(dateTime,reportId);
+        report1.setReportId(report1.getReportId());
+        report1.setModifiedDate(dateTime);
+        report1.setHasBeenResolved(Boolean.TRUE);
+        Report rs =reportRepository.save(report1);
 
         Optional<Report> report = reportRepository.findById(reportId);
         return ResponseEntity.ok( new GenericResponse("00",

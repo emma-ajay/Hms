@@ -45,9 +45,9 @@ public class ReportController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @GetMapping(path = "/hall/{hallName}")
-    public ResponseEntity<?> viewAllReportsByHall(String hallName){
-        return reportService.viewAllReportsByHall(hallName);
+    @GetMapping(path = "/hall/{hallId}")
+    public ResponseEntity<?> viewAllReportsByHall(@PathVariable Long hallId){
+        return reportService.viewAllReportsByHall(hallId);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")

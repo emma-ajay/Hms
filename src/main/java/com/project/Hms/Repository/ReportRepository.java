@@ -22,9 +22,9 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
     @Query("SELECT u FROM Report u WHERE u.hasBeenResolved = false")
     List<Report> findReportsByNotResolved();
 
-    @Modifying
-    @Query("Update Report u SET u.hasBeenResolved = true, u.modifiedDate =?1   WHERE u.reportId =?1")
-    void resolveReport(String modifiedDate, Long reportId);
+//    @Modifying
+//    @Query("Update Report u SET u.hasBeenResolved = true, u.modifiedDate =?1   WHERE u.reportId =?1")
+//    void resolveReport(String modifiedDate, Long reportId);
 
     @Query("SELECT u FROM Report u WHERE u.reportId = ?1")
     Report findReportsByReportId(Long reportId);

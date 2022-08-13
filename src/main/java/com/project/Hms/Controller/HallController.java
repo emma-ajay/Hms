@@ -268,7 +268,7 @@ public class HallController {
         }
     }
 
-//TODO get all floors in a wing
+// get all floors in a wing
 @GetMapping(path = "/{hallId}/{wingId}/floors")
 public  ResponseEntity<GenericResponse> getAllFloorsInAWingInHall(@PathVariable Long hallId,@PathVariable Long wingId){
 
