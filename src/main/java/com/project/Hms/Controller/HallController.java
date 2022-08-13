@@ -2,6 +2,7 @@ package com.project.Hms.Controller;
 
 import com.project.Hms.DTO.Requests.CreateHall;
 import com.project.Hms.DTO.Response.GenericResponse;
+import com.project.Hms.Entity.Floor;
 import com.project.Hms.Entity.Hall;
 import com.project.Hms.Entity.Wing;
 import com.project.Hms.Service.HallService;
@@ -232,7 +233,7 @@ public class HallController {
         }
     }
 
-    //review!!
+    // get all wings in a hall
     @GetMapping(path = "/{hallId}/wings")
     public  ResponseEntity<GenericResponse> getWingsInHall(@PathVariable Long hallId){
 
@@ -268,6 +269,50 @@ public class HallController {
     }
 
 //TODO get all floors in a wing
+@GetMapping(path = "/{hallId}/{wingId}/floors")
+public  ResponseEntity<GenericResponse> getAllFloorsInAWingInHall(@PathVariable Long hallId,@PathVariable Long wingId){
+
+    try{
+
+        String message = "Request successful";
+        Hall hall = hallService.findHallById(hallId);
+        Wing wing = wingService.findWingById(wingId);
+        if (hall == null) {
+            message = "Hall does not exist";
+            return new ResponseEntity<>(new GenericResponse(
+                    "99", HttpStatus.BAD_REQUEST,
+                    message),
+                    new HttpHeaders(),
+                    HttpStatus.BAD_REQUEST);
+        }
+        if (wing == null) {
+            message = "Wing does not exist";
+            return new ResponseEntity<>(new GenericResponse(
+                    "99", HttpStatus.BAD_REQUEST,
+                    message),
+                    new HttpHeaders(),
+                    HttpStatus.BAD_REQUEST);
+        }
+        List<Floor> floorsInWingHAll = hall_wing_floor_service.viewAllFloorsInWingHAll(wingId,hallId);
+
+        return new ResponseEntity<>
+                (new GenericResponse("00",
+                        HttpStatus.OK,
+                        message,
+                        floorsInWingHAll),
+                        new HttpHeaders(),
+                        HttpStatus.OK);
+    } catch (Exception e) {
+        e.printStackTrace();
+        return new ResponseEntity<>(new GenericResponse("99",
+                HttpStatus.BAD_REQUEST,
+                e.getLocalizedMessage()),
+                new HttpHeaders(),
+                HttpStatus.BAD_REQUEST);
+    }
+}
+
+
     @PostMapping(path = "/assign/{hallId}/{wingId}")
     public ResponseEntity<?> assignWingToHall(@PathVariable Long hallId, @PathVariable Long wingId){
         return  hall_wing_floor_service.assignWingToHall(hallId,wingId);

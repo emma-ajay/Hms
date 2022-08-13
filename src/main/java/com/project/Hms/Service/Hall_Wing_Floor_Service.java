@@ -2,6 +2,7 @@ package com.project.Hms.Service;
 
 
 import com.project.Hms.DTO.Response.GenericResponse;
+import com.project.Hms.Entity.Floor;
 import com.project.Hms.Entity.Hall;
 import com.project.Hms.Entity.Hall_Wing_Floor;
 import com.project.Hms.Entity.Wing;
@@ -27,6 +28,9 @@ public class Hall_Wing_Floor_Service {
 
     @Autowired
     WingService wingService;
+
+    @Autowired
+    FloorService floorService;
 
     // assign wing to a hall
 
@@ -108,7 +112,16 @@ public class Hall_Wing_Floor_Service {
     }
 
     // view all floors in a wing belonging to hall
-    public List<Long> viewAllFloorsInWingHAll(Long wingId, Long hallId){
-        return hall_wing_floorRepository.viewAllFloorsInWingHAll(wingId,hallId);
+    public List<Floor> viewAllFloorsInWingHAll(Long wingId, Long hallId){
+        List<Long> floorListId = new ArrayList<>();
+        floorListId =hall_wing_floorRepository.viewAllFloorsInWingHAll(hallId,wingId);
+        List<Floor> floorList = new ArrayList<>();
+        int size = floorListId.size();
+        for (int i = 0; i<size; i++){
+            Long floorId = floorListId.get(i);
+            Floor floor = floorService.findFloorById(floorId);
+            floorList.add(i,floor);
+        }
+        return floorList;
     }
 }
