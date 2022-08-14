@@ -4,11 +4,13 @@ public class JwtAuthenticationResponse {
     private String tokenType = "Bearer";
     private String UserNameOrEmail;
     private Object role;
+    private Object profile;
 
-    public JwtAuthenticationResponse(String accessToken, String UserNameOrEmail , Object role) {
+    public JwtAuthenticationResponse(String accessToken, String UserNameOrEmail , Object role,Object profile) {
         this.accessToken = accessToken;
         this.UserNameOrEmail = UserNameOrEmail;
         this.role = role;
+        this.profile= profile;
     }
 
     public String getAccessToken() {
@@ -42,5 +44,13 @@ public class JwtAuthenticationResponse {
 
     public void setRole(Object role) {
         this.role = role;
+    }
+
+    public Object getProfile() {
+        return profile;
+    }
+
+    public void setProfile(Object profile) {
+        this.profile = profile;
     }
 }

@@ -6,7 +6,7 @@ import javax.persistence.*;
 public class Hall_Wing_Floor {
     @Id
     @SequenceGenerator(
-            name = "hall_wing_floor",
+            name = "hall_wing_floor_sequence",
             sequenceName = "hall_wing_floor_sequence",
             allocationSize = 1
     )

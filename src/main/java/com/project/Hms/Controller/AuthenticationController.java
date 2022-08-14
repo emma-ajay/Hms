@@ -5,6 +5,7 @@ import com.project.Hms.DTO.Requests.RegisterRequest;
 import com.project.Hms.DTO.Requests.SignInRequest;
 import com.project.Hms.DTO.Response.ApiResponse;
 import com.project.Hms.DTO.Response.JwtAuthenticationResponse;
+import com.project.Hms.DTO.Response.Profile;
 import com.project.Hms.Entity.Role;
 import com.project.Hms.Entity.RoleName;
 import com.project.Hms.Entity.User;
@@ -68,9 +69,10 @@ public class AuthenticationController {
         String jwt =tokenProvider.generateToken(authentication);
 
         User user = userRepository.getUserByEmailOrUserName(email);
+        Profile profile = modelMapper.map(user,Profile.class);
         Set<Role> roleSet = user.getRoles();
 
-        return ResponseEntity.ok(new JwtAuthenticationResponse(jwt,email,roleSet));
+        return ResponseEntity.ok(new JwtAuthenticationResponse(jwt,email,roleSet,profile));
     }
 
     // Register Student
