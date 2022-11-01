@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -134,6 +136,12 @@ public class RoomService {
     //view all rooms in a wing in a hall
 
     // view all rooms in a floor in a wing in a hall
+    public List<Room> viewRoomsByHallWingAndFloorId (Long hallId, Long wingId, Long floorId){
+         //TODO checks for id
+         List<Room> roomList=  new ArrayList<>();
+         roomList = roomRepository.findRoomsByHallWingAndFloorId(hallId, wingId, floorId);
+         return roomList;
+    }
 
     // view all rooms that are not full in a hall
 
